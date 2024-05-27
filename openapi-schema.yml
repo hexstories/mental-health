@@ -1,0 +1,41 @@
+openapi: 3.0.2
+info:
+  title: ''
+  version: ''
+paths:
+  /api/home/:
+    get:
+      operationId: listHomePages
+      description: ''
+      parameters: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items: {}
+          description: ''
+      tags:
+      - api
+  /api/booking/:
+    post:
+      operationId: createBooking
+      description: ''
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema: {}
+          application/x-www-form-urlencoded:
+            schema: {}
+          multipart/form-data:
+            schema: {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema: {}
+          description: ''
+      tags:
+      - api
