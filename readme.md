@@ -1,1 +1,6 @@
-Api for having sessions with councellors and booking councellors
+clone repo
+navigate to project directory
+create virtual environment
+install required dependencies
+run database
+runserver
