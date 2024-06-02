@@ -9,7 +9,7 @@ genai.configure(api_key = os.getenv("GOOGLE_API_KEY"))
 
 #load model
 
-model = genai.GenerativeModel("gemini-pro")
+model = genai.GenerativeModel()
 chat = model.start_chat(history =[])
 
 def get_gemini_response(question):
