@@ -77,6 +77,7 @@ PyJWT
 pyparsing
 python-dateutil
 python-dotenv
+psycopg2-binary
 pytz
 PyYAML
 referencing
