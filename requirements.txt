@@ -75,7 +75,7 @@ Pygments
 PyJWT
 pyparsing
 python-dateutil
-python-dotenv1
+python-dotenv
 pytz
 PyYAML
 referencing
