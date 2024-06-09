@@ -107,4 +107,5 @@ urllib3
 vertexai
 virtualenv
 watchdog
+whitenoise
 yarl
