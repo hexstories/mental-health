@@ -41,6 +41,7 @@ googleapis-common-protos
 grpc-google-iam-v1
 grpcio
 grpcio-status
+gunicorn
 h11
 httpcore
 httplib2
