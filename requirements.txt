@@ -91,7 +91,7 @@ six
 smmap
 sniffio
 sqlparse
-sympy1
+sympy
 tbb
 tenacity
 toml
