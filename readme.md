@@ -8,7 +8,7 @@ To get started, you need to have Python and Django installed on your system.
 
 1. Clone the repository:
  ```shell
-git clone https://github.com/hexstories/Councellor-Api.git
+git clone https://github.com/hexstories/mental-health.git
 ```
 
 2. Navigate to project directory:
