@@ -13,7 +13,7 @@ git clone https://github.com/hexstories/mental-health.git
 
 2. Navigate to project directory:
  ```shell
-cd councellor proj
+cd mental-health
 ```
 
 4. Activate the virtual environment:
