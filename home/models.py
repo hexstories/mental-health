@@ -19,15 +19,30 @@ class Announcement(models.Model):
     def __str__(self):
         return self.title
 
+
 class Booking(models.Model):
-    full_name = models.CharField(max_length=100)
-    email = models.EmailField(validators=[RegexValidator(
-        regex=r'^[a-zA-Z0-9._%+-]+@st\.knust\.edu\.gh$',
-        message='Email must be a valid KNUST student email'
-    )])
+    full_name = models.CharField(
+        max_length=100,
+        validators=[
+            RegexValidator(
+                regex="^[A-Za-z\s'-]+$",
+                message='Full name must contain only letters'
+            )
+        ]
+    )
+    email = models.EmailField(
+        validators=[
+            RegexValidator(
+                regex=r'^[a-zA-Z0-9._%+-]+@st\.knust\.edu\.gh$',
+                message='Email must be a valid KNUST student email'
+            )
+        ]
+    )
     phone_number = models.CharField(max_length=15)
     booking_date = models.DateField()
     message = models.TextField()
 
     def __str__(self):
         return self.full_name
+    
+
