@@ -42,6 +42,7 @@ INSTALLED_APPS = [
      'corsheaders',
 
      'home',
+      'counselors',
      'self_help',
      'drf_yasg',
 ]
