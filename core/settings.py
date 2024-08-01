@@ -1,11 +1,13 @@
 from pathlib import Path
+import os
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-import os
-from dotenv import load_dotenv
+
+
 
 load_dotenv()
 
@@ -37,15 +39,20 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-     'rest_framework',
-     'rest_framework_simplejwt',
-     'corsheaders',
+    'rest_framework',
+    'rest_framework_simplejwt',
+    'corsheaders',
+    'drf_yasg',
 
-     'home',
-      'counselors',
-     'self_help',
-     'drf_yasg',
+    'apps.student',
+    'apps.self_help',
+    'apps.counselors',
+    'apps.home',
+    'apps.appointment',
+     
 ]
+
+AUTH_USER_MODEL = 'student.User'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -65,7 +72,7 @@ CORS_ALLOW_ALL_ORIGINS = True
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR /'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -117,6 +124,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
@@ -150,3 +158,11 @@ REST_FRAMEWORK = {
 
 ]
 }
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'kwakuasihene@gmail.com'
+EMAIL_HOST_PASSWORD = 'pjlsmshirhomgnbw'
+DEFAULT_FROM_EMAIL = 'kwakuasihene@gmail.com'
