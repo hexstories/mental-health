@@ -16,7 +16,7 @@ load_dotenv()
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY = os.environ.get('SECRET_KEY', default="%7pgsi6!ia^xp@&yds6*(im54be@ks!e=4vja7^b&drg=q5-46")
 
 # Ensure SECRET_KEY is not None or empty
 if not SECRET_KEY:
@@ -93,16 +93,27 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 
 
+import os
+
+USE_POSTGRESQL = all([
+    os.getenv("DB_NAME"),
+    os.getenv("DB_USER"),
+    os.getenv("DB_PASSWORD"),
+    os.getenv("DB_HOST"),
+    os.getenv("DB_PORT"),
+])
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DB_NAME'),
-        'USER': os.getenv('DB_USER'),
-        'PASSWORD': os.getenv('DB_PASSWORD'),
-        'HOST': os.getenv('DB_HOST'),
-        'PORT': os.getenv('DB_PORT'),
+    "default": {
+        "ENGINE": "django.db.backends.postgresql" if USE_POSTGRESQL else "django.db.backends.sqlite3",
+        "NAME": os.getenv("DB_NAME") if USE_POSTGRESQL else os.path.join(BASE_DIR, "db.sqlite3"),
+        "USER": os.getenv("DB_USER") if USE_POSTGRESQL else "",
+        "PASSWORD": os.getenv("DB_PASSWORD") if USE_POSTGRESQL else "",
+        "HOST": os.getenv("DB_HOST") if USE_POSTGRESQL else "",
+        "PORT": os.getenv("DB_PORT") if USE_POSTGRESQL else "",
     }
 }
+
 
 
 # Password validation

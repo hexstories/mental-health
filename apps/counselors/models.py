@@ -1,6 +1,8 @@
 from django.db import models
+from ..student.models import User
 
 class Counselor(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
     phone = models.CharField(max_length=20, blank=True)
@@ -14,29 +16,4 @@ class Counselor(models.Model):
     def __str__(self):
         return self.name
     
-#     @property
-#     def total_appointments_completed(self):
-#         return self.appointment_set.filter(status=Appointment.Status.COMPLETED).count()
-    
-#     @property
-#     def total_appointments_pending(self):
-#         return self.appointment_set.filter(status=Appointment.Status.PENDING).count()
-    
-#     @property
-#     def total_appointments_cancelled(self):
-#         return self.appointment_set.filter(status=Appointment.Status.CANCELLED).count()
-
-# class Appointment(models.Model):
-#     class Status(models.TextChoices):
-#         PENDING = 'Pending'
-#         COMPLETED = 'Completed'
-#         CANCELLED = 'Cancelled'
-
-    # counselor = models.ForeignKey('Counselor', on_delete=models.CASCADE)
-    # student = models.CharField(max_length=255)
-    # date = models.DateTimeField()
-    # status = models.CharField(max_length=50, choices=Status.choices, default=Status.PENDING)
-
-    
-
 
