@@ -93,7 +93,6 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 
 
-import os
 
 USE_POSTGRESQL = all([
     os.getenv("DB_NAME"),

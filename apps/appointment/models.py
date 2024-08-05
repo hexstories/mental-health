@@ -16,6 +16,7 @@ class Appointment(models.Model):
     counselor = models.ForeignKey(Counselor, on_delete=models.CASCADE)
     date = models.DateTimeField()
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="scheduled")
+    created_at = models.DateTimeField(auto_now_add=True)
 
     @property
     def is_completed(self):
