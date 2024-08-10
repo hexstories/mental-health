@@ -1,6 +1,9 @@
 from pathlib import Path
 import os
+import os.path
 from dotenv import load_dotenv
+
+from django.core.exceptions import ImproperlyConfigured
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -94,25 +97,39 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 
 
-USE_POSTGRESQL = all([
-    os.getenv("DB_NAME"),
-    os.getenv("DB_USER"),
-    os.getenv("DB_PASSWORD"),
-    os.getenv("DB_HOST"),
-    os.getenv("DB_PORT"),
-])
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql" if USE_POSTGRESQL else "django.db.backends.sqlite3",
-        "NAME": os.getenv("DB_NAME") if USE_POSTGRESQL else os.path.join(BASE_DIR, "db.sqlite3"),
-        "USER": os.getenv("DB_USER") if USE_POSTGRESQL else "",
-        "PASSWORD": os.getenv("DB_PASSWORD") if USE_POSTGRESQL else "",
-        "HOST": os.getenv("DB_HOST") if USE_POSTGRESQL else "",
-        "PORT": os.getenv("DB_PORT") if USE_POSTGRESQL else "",
+# Function to check if PostgreSQL environment variables are set
+def postgresql_config_complete():
+    required_vars = ["DB_NAME", "DB_USER", "DB_PASSWORD", "DB_HOST", "DB_PORT"]
+    return all(os.getenv(var) for var in required_vars)
+
+# Try to use PostgreSQL, fall back to SQLite if not configured
+try:
+    if postgresql_config_complete():
+        DATABASES = {
+            "default": {
+                "ENGINE": "django.db.backends.postgresql",
+                "NAME": os.getenv("DB_NAME"),
+                "USER": os.getenv("DB_USER"),
+                "PASSWORD": os.getenv("DB_PASSWORD"),
+                "HOST": os.getenv("DB_HOST"),
+                "PORT": os.getenv("DB_PORT"),
+            }
+        }
+        # Test the PostgreSQL connection
+        from django.db import connections
+        connections['default'].ensure_connection()
+        print("Successfully connected to PostgreSQL")
+    else:
+        raise ImproperlyConfigured("PostgreSQL environment variables are not fully set")
+except Exception as e:
+    print(f"Error with PostgreSQL: {e}. Falling back to SQLite.")
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+        }
     }
-}
-
 
 
 # Password validation
