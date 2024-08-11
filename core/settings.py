@@ -2,12 +2,15 @@ from pathlib import Path
 import os
 import os.path
 from dotenv import load_dotenv
-
-from django.core.exceptions import ImproperlyConfigured
+import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+APPS_DIR = BASE_DIR / "apps"
 
+# Setup to read .env file
+env = environ.Env()
+env.read_env(str(BASE_DIR / ".env"))
 
 
 
@@ -98,39 +101,11 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 
 
-# Function to check if PostgreSQL environment variables are set
-def postgresql_config_complete():
-    required_vars = ["DB_NAME", "DB_USER", "DB_PASSWORD", "DB_HOST", "DB_PORT"]
-    return all(os.getenv(var) for var in required_vars)
+# Database
+# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# Try to use PostgreSQL, fall back to SQLite if not configured
-try:
-    if postgresql_config_complete():
-        DATABASES = {
-            "default": {
-                "ENGINE": "django.db.backends.postgresql",
-                "NAME": os.getenv("DB_NAME"),
-                "USER": os.getenv("DB_USER"),
-                "PASSWORD": os.getenv("DB_PASSWORD"),
-                "HOST": os.getenv("DB_HOST"),
-                "PORT": os.getenv("DB_PORT"),
-            }
-        }
-        # Test the PostgreSQL connection
-        from django.db import connections
-        connections['default'].ensure_connection()
-        print("Successfully connected to PostgreSQL")
-    else:
-        raise ImproperlyConfigured("PostgreSQL environment variables are not fully set")
-except Exception as e:
-    print(f"Error with PostgreSQL: {e}. Falling back to SQLite.")
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
-        }
-    }
-
+DATABASES = {"default": env.db("DATABASE_URL", default="sqlite:///db.sqlite3")}
+DATABASES["default"]["ATOMIC_REQUESTS"] = True
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
