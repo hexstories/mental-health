@@ -4,9 +4,11 @@ import os.path
 from dotenv import load_dotenv
 import environ
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 APPS_DIR = BASE_DIR / "apps"
+
 
 # Setup to read .env file
 env = environ.Env()
@@ -22,7 +24,10 @@ load_dotenv()
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', default="%7pgsi6!ia^xp@&yds6*(im54be@ks!e=4vja7^b&drg=q5-46")
+SECRET_KEY = env(
+    "DJANGO_SECRET_KEY",
+    default="django-insecure-z!2xl-#czs^y#9*tgxyf__7u^-&%!)3zohyh73ndi)_$!pvou=",
+)
 
 # Ensure SECRET_KEY is not None or empty
 if not SECRET_KEY:
@@ -30,7 +35,7 @@ if not SECRET_KEY:
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG')
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -58,11 +63,13 @@ INSTALLED_APPS = [
      
 ]
 
+
 AUTH_USER_MODEL = 'student.User'
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-     'whitenoise.middleware.WhiteNoiseMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -72,31 +79,32 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+
 ROOT_URLCONF = 'core.urls'
 CORS_ALLOW_ALL_ORIGINS = True
 
+
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [str(APPS_DIR / "templates")],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+        "OPTIONS": {
+            "loaders": [
+                "django.template.loaders.filesystem.Loader",
+                "django.template.loaders.app_directories.Loader",
+            ],
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
             ],
         },
     },
 ]
 
+
 WSGI_APPLICATION = 'core.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-
 
 
 
@@ -106,6 +114,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {"default": env.db("DATABASE_URL", default="sqlite:///db.sqlite3")}
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
