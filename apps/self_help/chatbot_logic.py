@@ -7,7 +7,6 @@ from django.core.cache import cache
 
 load_dotenv()
 
-
 class CounsellingSession:
     """
     A class representing a counselling session with a chatbot.
@@ -21,11 +20,11 @@ class CounsellingSession:
         Initialize the CounsellingSession object.
         Configures the generative AI with the Google API key and initializes the logger.
         """
-        genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+        genai.configure(api_key=os.getenv("GOOGLE_API_KEY", default="AIzaSyD_x1b3KMSX8E7gQRoDCvN3yHDzw5FA1bs"))
         self.logger = logging.getLogger(__name__)
         logging.basicConfig(level=logging.INFO)
 
-    async def generate_response(self, user_input):
+    def generate_response(self, user_input):
         """
         Generate a response based on user input.
         This method generates an initial empathetic response, followed by advice and a follow-up question.
@@ -39,7 +38,8 @@ class CounsellingSession:
         try:
             def get_response(prompt):
                 response = genai.generate_text(prompt=prompt, model="models/text-bison-001")
-                return response
+                # Ensure to extract the text result from the response
+                return response.result if response and response.result else ""
 
             # Cache key based on the user input
             cache_key = f"response_{hash(user_input)}"
@@ -57,9 +57,8 @@ class CounsellingSession:
                 f"The user says: '{user_input}'. After providing advice, ask a follow-up question to show continued support and engagement."
             ]
 
-            # Asynchronously generate responses
-            tasks = [get_response(prompt) for prompt in prompts]
-            responses = await asyncio.gather(*tasks)
+            # Generate responses
+            responses = [get_response(prompt) for prompt in prompts]
 
             response = {
                 "initial_response": responses[0],
