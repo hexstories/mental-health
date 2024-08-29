@@ -1,6 +1,10 @@
 from pathlib import Path
 import os
 import environ
+import dotenv
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 
@@ -94,11 +98,23 @@ TEMPLATES = [
 WSGI_APPLICATION = 'core.wsgi.application'
 
 
-# Database
-DATABASES = {"default": env.db("DATABASE_URL", default="sqlite:///db.sqlite3")}
-DATABASES["default"]["ATOMIC_REQUESTS"] = True
+# DATABASES
+# ------------------------------------------------------------------------------
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
+        'PORT': os.getenv('DB_PORT'),
+    }
+}
 
-
+# DATABASES = {"default": env.db("DATABASE_URL", default="sqlite:///db.sqlite3")}
+# DATABASES = env.db("DATABASE_URL", default="")  # noqa F405
+# DATABASES["default"]["ATOMIC_REQUESTS"] = True  # noqa F405
+# DATABASES["default"]["CONN_MAX_AGE"] = env.int("CONN_MAX_AGE", default=60)
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
